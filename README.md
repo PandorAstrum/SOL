@@ -2,8 +2,7 @@
 > Smart Contracts contained the ERC20 Token named TrainDany (TDY) and 3 staged Crowdsale.
 
 [![Solidity Version][solidity-image]][solidity-url]
-[![Token Test Status][token-test-image]][token-test-url]
-[![Crowdsale Test Status][crowdsale-test-image]][crowdsale-test-url]
+[![Test Status][token-test-image]][token-test-url]
 
 TrainDany is a ERC20 Standard Token, where all tokens are pre-assigned to the creator.
  * Name is TrainDany, Symbol is TDY, Decimals are 8.
@@ -14,10 +13,10 @@ TrainDany is a ERC20 Standard Token, where all tokens are pre-assigned to the cr
  * Tokens offered through Private Sale would be 625 000 000 TDY Tokens (10% of total Sell Token)
  * Tokens offered through Crowdsale would be 1 875 000 000 TDY Tokens (30% of total Sell Token)
  * Total Sellable Token would be 4 000 000 000 TDY Tokens (64%)
- * Bonus token would be 125 000 000 TDY Tokens (2%) 
+ * Bonus token would be 187 500 000 TDY Tokens (3%) 
  * For Team total 625 000 000 TDY would be reserved (10%)
  * For Advisor total 500 000 000 TDY would be Reserved (8%)
- * 1 000 000 000 TDY would be Reserved (16%)
+ * 937 500 000 TDY would be Reserved (15%)
  * There will be a max cap of 6 250 000 000 TDY tokens (100%)
  * 40% would be at the end of crowdsale and transferred to the TDY Token Reserve
  * Presale participants would be offered 30% extra tokens as bonus
@@ -67,13 +66,12 @@ To flat into a single contract run:
 sh flatten.sh
 ```
 
-
 ## Release History
 
 * V1.0
     * ADD: Basic ERC20 Token
     * ADD: 3 Stages Crowdsale Contracts
-
+    * ADD: Distribution of Calculated Token 
 ## Meta
 
 Ashiquzzaman Khan – [@dreadlordn](https://twitter.com/dreadlordn)
@@ -82,14 +80,9 @@ Distributed under the MIT license. See ``LICENSE`` for more information.
 
 [https://github.com/PandorAstrum/SOL](https://github.com/PandorAstrum/SOL)
 
-
 <!-- Markdown link & img dfn's -->
 [solidity-image]: https://img.shields.io/badge/Solidity-0.4.24-yellowgreen.svg?style=flat-square
 [solidity-url]: https://solidity.readthedocs.io/en/v0.4.24/
 
 [token-test-image]: https://travis-ci.org/PandorAstrum/_vault.svg?branch=master
 [token-test-url]: https://travis-ci.org/PandorAstrum/_vault
-
-[token-test-image]: https://ci.appveyor.com/api/projects/status/8dxrtild5jew79pq?svg=true
-[token-test-url]: https://ci.appveyor.com/project/PandorAstrum/vault
-

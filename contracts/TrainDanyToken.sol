@@ -4,6 +4,7 @@ pragma solidity ^0.4.24;
 import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol";
+import "./../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
@@ -34,19 +35,10 @@ contract TrainDanyToken is DetailedERC20, StandardToken, PausableToken {
     uint256 private _salesCap = 4000000000;                 // 64% of total token
     uint256 private _teamCap = 625000000;                   // 10% of total token
     uint256 private _advisorCap = 500000000;                // 8% of total token
-    uint256 private _reservedCap = 1000000000;              // 16% of total token
-    uint256 private _bonusCap = 125000000;                  // 2% of total token
+    uint256 private _reservedCap = 937500000;               // 15% of total token
+    uint256 private _bonusCap = 187500000;                  // 3% of total token
     // max cap for the token
     uint256 private constant _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
-    
-    address private owner;
-    /**
-    * @dev Throws if called by any account other than the owner.
-    */
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens.
