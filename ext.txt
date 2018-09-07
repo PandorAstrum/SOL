@@ -1,3 +1,65 @@
 token address 0x013553BF0f7843518a0842522D85fb871FFc0353
 https://rinkeby.etherscan.io/token/0x013553bf0f7843518a0842522d85fb871ffc0353#writeContract
 
+
+/**
+ * @title TDY Token
+ * @dev ERC20 Token Implementation on TDY Token, where all tokens are pre-assigned to the creator.
+ * Note they can later distribute these tokens as they wish using `transfer` and other
+ * `StandardToken` functions.
+
+ Criteria ------------------------------------------------
+
+    Bonus&Bounty : yes 
+    eth adress 0x3B6a332f204CB12a45afb4e03ae5E600f71E6BB9 (Done) t
+    Duration & Deadline : 25oct-25nov (implementation stage) 
+    Funding Goal in Wei : 15625000000000000000000 (Done) c
+    Price in Wei : 25000000000000 (Done) c
+    Minimum invstement 0.1ETH (or equivalent in BTC ETH LTC BCH) (Done) c
+    Max invest : no-limit (Done) c
+    1 TDY = 0.000025ETH (Done) c
+    KYC (know your customers) : Yes (Implementation stage)
+    Beneficiary Address (If success send to this address) : 0x3B6a332f204CB12a45afb4e03ae5E600f71E6BB9 (same as eth adress ?)
+    64% distributed to comunity 
+    3% bounty 
+    15% reserve 
+    10% team
+    8% Advisor
+    
+    --Token sale stage in 3 stages
+
+    --Stage 1 private sell
+        token available : 625 000 000 TDY
+        Bonus 50%
+        minimum invst 250 ETH
+        25 sept to 05 oct
+
+    --Stage 2 pre-sell
+        token available : 625 000 000 TDY
+        Bonus 30%
+        Mini invest : 0.1 ETH
+        05 oct to 25 oct
+
+    --Stage 3 Public sell
+        token available : 1 875 000 000 TDY
+        Bonus : from 25 oct 25 Nov
+        1st week 20%
+        2nd week : 10%
+        3rd week : 5%
+        4th week : No Bonus
+
+        Mini invest : 0.1 ETH
+        Duration 30 days
+
+
+TEAM : 625 000 000 TDY in total for the team
+
+- 31
+2 500 000 TDY blocked for 1 year
+- 312 500 000 TDY blocked for 2 year
+
+ADVISORS : 500 000 000 TDY in total for advisors
+Blocked for 6 month
+
+only 3 125 000 000 are in sells, the rest is given as bonus to reach 64% of the 4 000 000 000 supply
+*/

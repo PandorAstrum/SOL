@@ -1,8 +1,6 @@
 // solium-disable linebreak-style
 pragma solidity ^0.4.24;
 
-// import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/WhitelistedCrowdsale.sol";
-// import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
@@ -17,12 +15,23 @@ contract TrainDanyCrowdsale is Crowdsale, Ownable {
 
     // TODO: Time crowdsale depending on sales stage
 
-    // ICO Stages Initializations ===========================================
+    // ICO Stages Initializations ======================================================
     enum CrowdsaleStage { Privatesale, Presale, Publicsale }        // All 3 Sale Stages
     CrowdsaleStage private stage;                                   // the sale stages
+
+    // Token Distribution
+    // =============================
+    uint256 public maxTokens = 400000000000000000;                  // There will be total 4000000000 TDY Tokens
+    uint256 public tokensForSales = 400000000000000000;
+    uint256 public tokensForTeam = 10000000000000000000;
+    uint256 public tokensForBonus = 10000000000000000000;
+    uint256 public tokenForAdvisor = 0;
+    uint256 public totalTokensForSale = 60000000000000000000; // 60 HTs will be sold in Crowdsale
+    uint256 public totalTokensForSaleDuringPreICO = 20000000000000000000; // 20 out of 60 HTs will be sold during PreICO
+    
     uint256 private startTime;                                      // Unix Epoch Time 1536105600 @ September 5, 2018 12:00:00 AM 
     uint256 private endTime;                                        // Unix Epoch Time  1537833600 @ September 25, 2018 12:00:00 AM
-   
+    TrainDanyToken private trainDanyToken;                          // The actual token contract for the TDY
     ERC20 private token;                                            // The ERC20 TDY Token Contract  
     address private wallet;                                         // Address where funds are collected "0x1406335646bf1fca47c9d08925f59c3f46b50276"
     // How many token units a buyer gets per wei.

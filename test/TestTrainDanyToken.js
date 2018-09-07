@@ -12,8 +12,13 @@ contract('TrainDanyToken', accounts => {
   const _name = "TrainDany";
   const _symbol = "TDY";
   const _decimals = 8;
-  const _totalSupply = 6250000000 * (10 ** _decimals);
   const _version = "V1.0";
+  const _salesCap = 4000000000;
+  const _teamCap = 625000000;
+  const _advisorCap = 500000000;
+  const _reservedCap = 937500000;
+  const _bonusCap = 187500000;
+  const _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** _decimals);
 
   beforeEach(async function(){
     this.token = await TrainDanyToken.new();
@@ -36,18 +41,44 @@ contract('TrainDanyToken', accounts => {
       decimals.should.be.bignumber.equal(_decimals);
     });
     //test token cap
-    it("Should be 625000000000000000 Total Supply of tokens", async function() {
+    it("Should be 6 250 000 000 00000000 Total Supply of tokens", async function() {
       const cap = await this.token.totalSupply();
       cap.should.be.bignumber.equal(_totalSupply);
     });
     // test owner balance
-    it("Should have 625000000000000000 TDY Token in Owners balance", async function() {
+    it("Should have 6 250 000 000 00000000 TDY Token in Owners balance", async function() {
       const balance = await this.token.balanceOf(creatorAddress);
       balance.should.be.bignumber.equal(625000000000000000);
+    });
+    // test Sales Cap
+    it("Should have 4 000 000 000 TDY Token Max cap for total sales", async function() {
+      const salesCap = await this.token.salesCap();
+      salesCap.should.be.bignumber.equal(_salesCap);
+    });
+    // test team cap
+    it("Should have 625 000 000 TDY Token Max cap for Team", async function() {
+      const teamCap = await this.token.teamCap();
+      teamCap.should.be.bignumber.equal(_teamCap);
+    });
+    // test advisors cap
+    it("Should have 500 000 000 TDY Token Max cap for Advisors", async function() {
+      const advisorCap = await this.token.advisorCap();
+      advisorCap.should.be.bignumber.equal(_advisorCap);
+    });
+    // test reserved cap
+    it("Should have 937 500 000 TDY Token Max cap for Reserved", async function() {
+      const reservedCap = await this.token.reservedCap();
+      reservedCap.should.be.bignumber.equal(_reservedCap);
+    });
+    // test bonus cap
+    it("Should have 187 500 000 TDY Token Max cap for bonus and bounty", async function() {
+      const bonusCap = await this.token.bonusCap();
+      bonusCap.should.be.bignumber.equal(_bonusCap);
     });
     // test version number
     it("Should be V1.0 in versioning number", async function(){
       const version = await this.token.version();
+      // await this.token.version().should.equal(_version);
       version.should.equal(_version);
     });
   });

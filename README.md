@@ -18,7 +18,6 @@ TrainDany is a ERC20 Standard Token, where all tokens are pre-assigned to the cr
  * For Advisor total 500 000 000 TDY would be Reserved (8%)
  * 937 500 000 TDY would be Reserved (15%)
  * There will be a max cap of 6 250 000 000 TDY tokens (100%)
- * 40% would be at the end of crowdsale and transferred to the TDY Token Reserve
  * Presale participants would be offered 30% extra tokens as bonus
  * Private participants would be offered 50% extra tokens as bonus
  * Crowdsale participants would be offered 20%, 10%, 5%, No bunus on respective weeks from start
