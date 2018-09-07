@@ -1,0 +1,4 @@
+# Directory to avoid
+node_modules
+.env
+build
