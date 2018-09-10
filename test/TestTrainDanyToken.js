@@ -6,9 +6,12 @@ require("chai")
   .should();
 
 contract('TrainDanyToken', accounts => {
+
+  // addresses for testing
   var creatorAddress = accounts[0];
   var recipientAddress = accounts[1];
   var delegatedAddress = accounts[2];
+  // general config for the token
   const _name = "TrainDany";
   const _symbol = "TDY";
   const _decimals = 8;
@@ -50,29 +53,29 @@ contract('TrainDanyToken', accounts => {
       const balance = await this.token.balanceOf(creatorAddress);
       balance.should.be.bignumber.equal(625000000000000000);
     });
-    // test Sales Cap
+    // test total Sales Cap with bonus
     it("Should have 4 000 000 000 TDY Token Max cap for total sales", async function() {
-      const salesCap = await this.token._salesCap.call();
+      const salesCap = await this.token.salesCap.call();
       salesCap.should.be.bignumber.equal(_salesCap);
     });
     // test team cap
     it("Should have 625 000 000 TDY Token Max cap for Team", async function() {
-      const teamCap = await this.token._teamCap.call();
+      const teamCap = await this.token.teamCap.call();
       teamCap.should.be.bignumber.equal(_teamCap);
     });
     // test advisors cap
     it("Should have 500 000 000 TDY Token Max cap for Advisors", async function() {
-      const advisorCap = await this.token._advisorCap.call();
+      const advisorCap = await this.token.advisorCap.call();
       advisorCap.should.be.bignumber.equal(_advisorCap);
     });
     // test reserved cap
     it("Should have 937 500 000 TDY Token Max cap for Reserved", async function() {
-      const reservedCap = await this.token._reservedCap.call();
+      const reservedCap = await this.token.reservedCap.call();
       reservedCap.should.be.bignumber.equal(_reservedCap);
     });
     // test bonus cap
     it("Should have 187 500 000 TDY Token Max cap for bonus and bounty", async function() {
-      const bonusCap = await this.token._bonusCap.call();
+      const bonusCap = await this.token.bonusCap.call();
       bonusCap.should.be.bignumber.equal(_bonusCap);
     });
     // test version number

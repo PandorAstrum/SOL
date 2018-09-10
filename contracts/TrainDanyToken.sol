@@ -6,7 +6,6 @@ import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/MintableTo
 
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
- * @author Ashiquzzaman Khan
  * @dev TrainDany is a ERC20 Standard Token, where all tokens are pre-assigned to the creator.
  * Note they can later distribute these tokens as they wish using `transfer` and other
  * `StandardToken` functions.
@@ -25,18 +24,17 @@ import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/MintableTo
  */
 
 contract TrainDanyToken is MintableToken, PausableToken {
-    /* members */
-    string public name = "TrainDany";            // Name of the token
-    string public symbol = "TDY";                // Symbol of the Token
-    uint8 public decimals = 8;                   // Decimal points of the token
-    string public version = "V1.0";              // Human arbitary versioning 
-    uint256 public _salesCap = 4000000000;                  // 64% of total token
-    uint256 public _teamCap = 625000000;                    // 10% of total token
-    uint256 public _advisorCap = 500000000;                 // 8% of total token
-    uint256 public _reservedCap = 937500000;                // 15% of total token
-    uint256 public _bonusCap = 187500000;                   // 3% of total token
-    // max cap for the token
-    uint256 private _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
+
+    string public name = "TrainDany";                       // Name of the token
+    string public symbol = "TDY";                           // Symbol of the Token
+    uint8 public decimals = 8;                              // Decimal points of the token
+    string public version = "V1.0";                         // Human arbitary versioning 
+    uint256 public salesCap = 4000000000;                   // 64% of total token
+    uint256 public teamCap = 625000000;                     // 10% of total token
+    uint256 public advisorCap = 500000000;                  // 8% of total token
+    uint256 public reservedCap = 937500000;                 // 15% of total token
+    uint256 public bonusCap = 187500000;                    // 3% of total token
+    uint256 private _totalSupply = (salesCap + teamCap + advisorCap + reservedCap + bonusCap) * (10 ** uint256(decimals)); // max cap for the token
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens. pause set to false by default

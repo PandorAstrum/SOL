@@ -54,8 +54,7 @@ https://rinkeby.etherscan.io/token/0x013553bf0f7843518a0842522d85fb871ffc0353#wr
 
 TEAM : 625 000 000 TDY in total for the team
 
-- 31
-2 500 000 TDY blocked for 1 year
+- 312 500 000 TDY blocked for 1 year
 - 312 500 000 TDY blocked for 2 year
 
 ADVISORS : 500 000 000 TDY in total for advisors
