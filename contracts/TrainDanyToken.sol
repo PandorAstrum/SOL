@@ -1,9 +1,8 @@
 // solium-disable linebreak-style
 pragma solidity ^0.4.24;
 
-import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/PausableToken.sol";
-import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol";
+import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
@@ -25,49 +24,27 @@ import "./../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedER
  * Unsold TDY tokens can not be burnt or minted
  */
 
-contract TrainDanyToken is DetailedERC20, StandardToken, PausableToken {
+contract TrainDanyToken is MintableToken, PausableToken {
     /* members */
-    string private constant _name = "TrainDany";            // Name of the token
-    string private constant _symbol = "TDY";                // Symbol of the Token
-    uint8 private constant _decimals = 8;                   // Decimal points of the token
-    string public _version = "V1.0";              // Human arbitary versioning 
+    string public name = "TrainDany";            // Name of the token
+    string public symbol = "TDY";                // Symbol of the Token
+    uint8 public decimals = 8;                   // Decimal points of the token
+    string public version = "V1.0";              // Human arbitary versioning 
     uint256 public _salesCap = 4000000000;                  // 64% of total token
     uint256 public _teamCap = 625000000;                    // 10% of total token
     uint256 public _advisorCap = 500000000;                 // 8% of total token
     uint256 public _reservedCap = 937500000;                // 15% of total token
     uint256 public _bonusCap = 187500000;                   // 3% of total token
     // max cap for the token
-    uint256 private constant _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
+    uint256 private _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens. pause set to false by default
     */
-    constructor() 
-        DetailedERC20(_name, _symbol, _decimals)
-        public {
+    constructor() public {
         totalSupply_ = _totalSupply;
         balances[msg.sender] = _totalSupply;
         owner = msg.sender;
         paused = false;
-    }
-
-    // delete those functions before deploy.. It is here for Testing purpose
-    function version() public view returns(string){
-        return _version;
-    }
-    function teamCap() onlyOwner public view returns(uint256) {
-        return _teamCap;
-    }
-    function advisorCap() onlyOwner public view returns(uint256) {
-        return _advisorCap;
-    }
-    function salesCap() onlyOwner public view returns(uint256) {
-        return _salesCap;
-    }
-    function reservedCap() onlyOwner public view returns(uint256) {
-        return _reservedCap;
-    }
-    function bonusCap() onlyOwner public view returns(uint256) {
-        return _bonusCap;
     }
 }

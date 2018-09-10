@@ -1,5 +1,6 @@
-// solium-disable linebreak-style
 pragma solidity ^0.4.24;
+
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20Basic.sol
 
 /**
  * @title ERC20Basic
@@ -12,6 +13,8 @@ contract ERC20Basic {
   function transfer(address _to, uint256 _value) public returns (bool);
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\math\SafeMath.sol
 
 /**
  * @title SafeMath
@@ -63,6 +66,8 @@ library SafeMath {
   }
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\BasicToken.sol
+
 /**
  * @title Basic token
  * @dev Basic version of StandardToken, with no allowances.
@@ -107,6 +112,8 @@ contract BasicToken is ERC20Basic {
 
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20.sol
+
 /**
  * @title ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
@@ -126,6 +133,8 @@ contract ERC20 is ERC20Basic {
   );
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\StandardToken.sol
+
 /**
  * @title Standard ERC20 token
  *
@@ -136,6 +145,7 @@ contract ERC20 is ERC20Basic {
 contract StandardToken is ERC20, BasicToken {
 
   mapping (address => mapping (address => uint256)) internal allowed;
+
 
   /**
    * @dev Transfer tokens from one address to another
@@ -244,6 +254,8 @@ contract StandardToken is ERC20, BasicToken {
 
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\ownership\Ownable.sol
+
 /**
  * @title Ownable
  * @dev The Ownable contract has an owner address, and provides basic authorization control
@@ -306,6 +318,8 @@ contract Ownable {
   }
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\lifecycle\Pausable.sol
+
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
@@ -349,6 +363,8 @@ contract Pausable is Ownable {
     emit Unpause();
   }
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\PausableToken.sol
 
 /**
  * @title Pausable token
@@ -413,23 +429,69 @@ contract PausableToken is StandardToken, Pausable {
   }
 }
 
-/**
- * @title DetailedERC20 token
- * @dev The decimals are only for visualization purposes.
- * All the operations are done using the smallest and indivisible token unit,
- * just as on Ethereum all the operations are done in wei.
- */
-contract DetailedERC20 is ERC20 {
-  string public name;
-  string public symbol;
-  uint8 public decimals;
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\MintableToken.sol
 
-  constructor(string _name, string _symbol, uint8 _decimals) public {
-    name = _name;
-    symbol = _symbol;
-    decimals = _decimals;
+/**
+ * @title Mintable token
+ * @dev Simple ERC20 Token example, with mintable token creation
+ * Based on code by TokenMarketNet: https://github.com/TokenMarketNet/ico/blob/master/contracts/MintableToken.sol
+ */
+contract MintableToken is StandardToken, Ownable {
+  event Mint(address indexed to, uint256 amount);
+  event MintFinished();
+
+  bool public mintingFinished = false;
+
+
+  modifier canMint() {
+    require(!mintingFinished);
+    _;
+  }
+
+  modifier hasMintPermission() {
+    require(msg.sender == owner);
+    _;
+  }
+
+  /**
+   * @dev Function to mint tokens
+   * @param _to The address that will receive the minted tokens.
+   * @param _amount The amount of tokens to mint.
+   * @return A boolean that indicates if the operation was successful.
+   */
+  function mint(
+    address _to,
+    uint256 _amount
+  )
+    public
+    hasMintPermission
+    canMint
+    returns (bool)
+  {
+    totalSupply_ = totalSupply_.add(_amount);
+    balances[_to] = balances[_to].add(_amount);
+    emit Mint(_to, _amount);
+    emit Transfer(address(0), _to, _amount);
+    return true;
+  }
+
+  /**
+   * @dev Function to stop minting new tokens.
+   * @return True if the operation was successful.
+   */
+  function finishMinting() public onlyOwner canMint returns (bool) {
+    mintingFinished = true;
+    emit MintFinished();
+    return true;
   }
 }
+
+// File: contracts\TrainDanyToken.sol
+
+// solium-disable linebreak-style
+pragma solidity ^0.4.24;
+
+
 
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
@@ -451,26 +513,24 @@ contract DetailedERC20 is ERC20 {
  * Unsold TDY tokens can not be burnt or minted
  */
 
-contract TrainDanyToken is DetailedERC20, StandardToken, PausableToken {
+contract TrainDanyToken  is MintableToken, PausableToken {
     /* members */
-    string private constant _name = "TrainDany";            // Name of the token
-    string private constant _symbol = "TDY";                // Symbol of the Token
-    uint8 private constant _decimals = 8;                   // Decimal points of the token
-    string public _version = "V1.0";              // Human arbitary versioning 
+    string public name = "TrainDany";            // Name of the token
+    string public symbol = "TDY";                // Symbol of the Token
+    uint8 public decimals = 8;                   // Decimal points of the token
+    string public version = "V1.0";              // Human arbitary versioning 
     uint256 public _salesCap = 4000000000;                  // 64% of total token
     uint256 public _teamCap = 625000000;                    // 10% of total token
     uint256 public _advisorCap = 500000000;                 // 8% of total token
     uint256 public _reservedCap = 937500000;                // 15% of total token
     uint256 public _bonusCap = 187500000;                   // 3% of total token
     // max cap for the token
-    uint256 private constant _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
+    uint256 private _totalSupply = (_salesCap + _teamCap + _advisorCap + _reservedCap + _bonusCap) * (10 ** uint256(decimals)); 
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens. pause set to false by default
     */
-    constructor() 
-        DetailedERC20(_name, _symbol, _decimals)
-        public {
+    constructor() public {
         totalSupply_ = _totalSupply;
         balances[msg.sender] = _totalSupply;
         owner = msg.sender;

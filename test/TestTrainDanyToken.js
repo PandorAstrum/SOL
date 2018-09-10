@@ -52,34 +52,39 @@ contract('TrainDanyToken', accounts => {
     });
     // test Sales Cap
     it("Should have 4 000 000 000 TDY Token Max cap for total sales", async function() {
-      const salesCap = await this.token.salesCap();
+      const salesCap = await this.token._salesCap.call();
       salesCap.should.be.bignumber.equal(_salesCap);
     });
     // test team cap
     it("Should have 625 000 000 TDY Token Max cap for Team", async function() {
-      const teamCap = await this.token.teamCap();
+      const teamCap = await this.token._teamCap.call();
       teamCap.should.be.bignumber.equal(_teamCap);
     });
     // test advisors cap
     it("Should have 500 000 000 TDY Token Max cap for Advisors", async function() {
-      const advisorCap = await this.token.advisorCap();
+      const advisorCap = await this.token._advisorCap.call();
       advisorCap.should.be.bignumber.equal(_advisorCap);
     });
     // test reserved cap
     it("Should have 937 500 000 TDY Token Max cap for Reserved", async function() {
-      const reservedCap = await this.token.reservedCap();
+      const reservedCap = await this.token._reservedCap.call();
       reservedCap.should.be.bignumber.equal(_reservedCap);
     });
     // test bonus cap
     it("Should have 187 500 000 TDY Token Max cap for bonus and bounty", async function() {
-      const bonusCap = await this.token.bonusCap();
+      const bonusCap = await this.token._bonusCap.call();
       bonusCap.should.be.bignumber.equal(_bonusCap);
     });
     // test version number
     it("Should be V1.0 in versioning number", async function(){
-      const version = await this.token.version();
+      const version = await this.token.version.call();
       // await this.token.version().should.equal(_version);
       version.should.equal(_version);
+    });
+    // pause state
+    it("Should be Puased Token", async function(){
+      const pause = await this.token.paused.call();
+      pause.should.equal(false);
     });
   });
 });
