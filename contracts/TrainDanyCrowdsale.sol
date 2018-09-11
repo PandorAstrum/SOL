@@ -3,41 +3,114 @@ pragma solidity ^0.4.24;
 
 import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
-// import "./../node_modules/openzeppelin-solidity/contracts/access/Whitelist.sol";
-// import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
+import "./../node_modules/openzeppelin-solidity/contracts/access/Whitelist.sol";
+import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
 import "./TrainDanyToken.sol";
 
-contract TrainDanyCrowdsale is TimedCrowdsale, Ownable {
-    uint256 public openingTime;
-    uint256 public closingTime;
+contract TrainDanyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
+    uint256 public openingTime;                                     // Sales Opening Time
+    uint256 public closingTime;                                     // Sales Closing Time
 
-    constructor(uint256 _startTime, uint256 _endTime, uint256 _rate, address _wallet, TrainDanyToken _trainDanyToken)
+    // ICO Stages ==========================================
+    enum CrowdsaleStage { PrivateSale, PreSale, PublicSale }        // All 3 Sale Stages
+    CrowdsaleStage public stage;                                   // the sale stages
+
+    uint256 public minimumInvest;                                   // minimum invest for investor
+    uint256 public totalTokenAvailableInThisStage;                  // token availbale for sell in this stage
+
+    // Token Distribution
+    // ====================================================
+    uint256 public maxTokens = 625000000000000000;                 // There will be total 4000000000 TDY Tokens
+
+    /**
+    *@dev Constructor for Initializing the sales upon deployment
+    *@param _stageValue values between 0,1,2 for sales stages
+    *@param _startTime start time in unix epoch can be got from https://www.epochconverter.com/
+    *@param _endTime end time in unix epoch can be got from https://www.epochconverter.com/
+    *@param _rate with 1 Ether how mnay TDY token can be bought (40000 TDY tokens)
+    *@param _wallet wallet address where the fund will be forwared upon purchases
+    *@param _trainDanyToken token contract address
+    */
+    constructor(uint _stageValue, uint256 _startTime, uint256 _endTime, uint256 _rate, address _wallet, TrainDanyToken _trainDanyToken)
         Crowdsale(_rate, _wallet, _trainDanyToken) 
         TimedCrowdsale(_startTime, _endTime)
         public {
-        openingTime = _startTime;
-        closingTime = _endTime;
+        setCrowdsale(_stageValue, _startTime, _endTime);
     }
 
     /**
     * @dev function for changing the time
+    * @param _newEndTime the new time for the sales closing time in unix epoch (can be got from https://www.epochconverter.com/)
     */
-    function changeTime(uint256 _newEndTime) onlyOwner public{
+    function changeTime(uint256 _newEndTime) onlyOwner public {
         // change base time
         closingTime = _newEndTime;
         // reset crowdsale time
     }
+    /**
+    * @dev functions for setting up the crowdsale stage
+    * @param _stageValue numerical value of the crowdsale stages.
+    * Available options are 0 = private sale, 1 = pre sale, 2 = public sale
+    * @param _startTime unix epoch time can be got from https://www.epochconverter.com/
+    * @param _endTime unix epoch time can be got from https://www.epochconverter.com/
+    */
+    function setCrowdsale(uint _stageValue, uint256 _startTime, uint256 _endTime) onlyOwner public {
+        require(_stageValue <= 2);
+
+        if (_stageValue == uint(CrowdsaleStage.PrivateSale)) {
+            stage = CrowdsaleStage.PrivateSale;
+            openingTime = _startTime;
+            closingTime = _endTime;
+            minimumInvest = 250 ether;
+            totalTokenAvailableInThisStage = 62500000000000000;
+            // bonus 
+        } else if (_stageValue == uint(CrowdsaleStage.PreSale)) {
+            stage = CrowdsaleStage.PreSale;
+            openingTime = _startTime;
+            closingTime = _endTime;
+            minimumInvest = 0.1 ether;
+            totalTokenAvailableInThisStage = 62500000000000000;
+            // bonus
+        } else if (_stageValue == uint(CrowdsaleStage.PublicSale)) {
+            stage = CrowdsaleStage.PublicSale;
+            openingTime = _startTime;
+            closingTime = _endTime;
+            minimumInvest = 0.1 ether;
+            totalTokenAvailableInThisStage = 187500000000000000;
+            //bonus
+        }
+    }
+
+    // Finish: Mint Extra Tokens as needed before finalizing the Crowdsale.
+    // ====================================================================
+
+    function finish(address _teamFund, address _ecosystemFund, address _bountyFund) public onlyOwner {
+
+        require(!isFinalized);
+        uint256 alreadyMinted = token.totalSupply();
+        require(alreadyMinted < maxTokens);
+
+        if (stage == CrowdsaleStage.PrivateSale){
+            uint256 unsoldTokens = totalTokenAvailableInThisStage - alreadyMinted;
+            if (unsoldTokens > 0) {
+                // mint to match cap for this stage
+            }
+        }
+        
+
+        // token.mint(_teamFund,tokensForTeam);
+        // token.mint(_ecosystemFund,tokensForEcosystem);
+        // token.mint(_bountyFund,tokensForBounty);
+        // finalize();
+    }
+  // ===============================
 }
 
 // contract TrainDanyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
 
-//     // ICO Stages ==========================================
-//     enum CrowdsaleStage { PrivateSale, PreSale, PublicSale }        // All 3 Sale Stages
-//     CrowdsaleStage private stage;                                   // the sale stages
 
-//     // Token Distribution
-//     // ====================================================
-//     uint256 public maxTokens = 625000000000000000;                          // There will be total 4000000000 TDY Tokens
+
+
 //     uint256 public tokensForSales = 400000000000000000;
 //     uint256 public tokensForTeam = 62500000000000000;                       // half blocked for 1 year / half blocked for 2 years
 //     uint256 public tokensForBonus = 18750000000000000;
@@ -52,7 +125,7 @@ contract TrainDanyCrowdsale is TimedCrowdsale, Ownable {
 //     uint256 public totalWeiRaisedDuringSale; // funding goal in wei 15625000000000000000000
 //     // ===================================================
 
-//     uint256 public minimumInvest;
+
 //     uint256 public bonus;
 //     uint256 public openingTime;
 //     uint256 public closingTime;

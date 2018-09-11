@@ -1,13 +1,16 @@
+import ether from "./helpers/ether";
+
 const BigNumber = web3.BigNumber;
 
 require("chai")
+  .use(require("chai-as-promised"))
   .use(require("chai-bignumber")(BigNumber))
   .should();
 
 const TrainDanyCrowdsale = artifacts.require("./TrainDanyCrowdsale.sol");
 const TrainDanyToken = artifacts.require("./TrainDanyToken.sol");
 
-contract('TrainDanyCrowdsale', function([_, wallet]){
+contract('TrainDanyCrowdsale', function([_, wallet, investor1, investor2]){
   beforeEach(async function(){
     //token config
     this.name = "TrainDany";
@@ -23,17 +26,24 @@ contract('TrainDanyCrowdsale', function([_, wallet]){
     this.closingTime = 1538265600; // Sunday, September 30, 2018 12:00:00 AM
     this.newOpeningTime = 1538697600; // Friday, October 5, 2018 12:00:00 AM
     this.newClosingTime = 1540857600; // Tuesday, October 30, 2018 12:00:00 AM
+    this.stageValue = 0;
+    this.stagesEnum = { "PrivateSale":0, "PreSale":1, "PublicSale":2};
     //Deploy crowdsale
     this.crowdsale = await TrainDanyCrowdsale.new(
+      this.stageValue,
       this.openingTime, 
       this.closingTime, 
       this.rate, 
       this.wallet, 
       this.token.address
     );
+
+    // transfer the ownership to crowdsale
+    await this.token.transferOwnership(this.crowdsale.address);
   });
 
   describe('Crowdsale', function(){
+
     // tracks the token
     it('Tracks the token', async function(){
       const token = await this.crowdsale.token();
@@ -46,7 +56,7 @@ contract('TrainDanyCrowdsale', function([_, wallet]){
     });
     // tracts the wallet
     it('Tracks the wallet', async function () {
-      const wallet = await this.crowdsale.wallet.call();
+      const wallet = await this.crowdsale.wallet();
       wallet.should.equal(this.wallet);
     });
   });
@@ -70,7 +80,37 @@ contract('TrainDanyCrowdsale', function([_, wallet]){
     });
   });
 
-  // describe('')
+  describe('Accepting Payments', function(){
+    it('Should accept payments', async function(){
+      const value = ether(1);
+      await this.crowdsale.sendTransaction({ value: value, from: investor1})
+    });
+  });
+
+  describe('Crowdsale Stages', function() {
+    it('should set the stage to private sale', async function () {
+      const stage = await this.crowdsale.stage.call();
+      assert.equal(stage.toNumber(), 0, 'The stage couldn\'t be set to PrivateSale');
+    });
+
+    it('should change the stage to public sale sale', async function () {
+      await this.crowdsale.setCrowdsale(2, this.openingTime, this.closingTime);
+      const stage = await this.crowdsale.stage.call();
+      assert.equal(stage.toNumber(), 2, 'The stage couldn\'t be set to PrivateSale');
+    });
+  });
+
+  // describe('KYC', function(){
+  //   // test for adding into whitelist
+  //   it('Should add the address to whitelist', async function(){
+  //     const whitelisted = await this.crowdsale.addAddressToWhitelist(whiteListedAddress);
+  //     whitelisted.should.equal(true);
+
+  //   });
+  //   // test for removing from whitelist
+
+  //   // test for roles
+  // });
 
 });
 
