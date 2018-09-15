@@ -114,10 +114,33 @@ contract TrainDanyToken is PausableToken, RBAC {
     * @dev overriding transfer function for extra logic
     */
     function transfer(address _to, uint256 _value) public returns(bool) {
-        // if the account is freezed
+        // check if the account is freezed
         require(!frozenAccount[msg.sender], "The sender accoutn is Frozen");
         require(!frozenAccount[_to], "The Reciever Account is Frozen");
-        
+        // check if the account is freezed
+        checker(_to, _value);
+
+        super.transfer(_to, _value);
+    }
+    /**
+    * @dev oberriding transferFrom function for extra logic
+    */
+    function transferFrom(address _from, address _to, uint256 _value) public returns(bool) {
+        // check if the account is freezed
+        require(!frozenAccount[_from], "The Sender Account is Frozen");
+        require(!frozenAccount[_to], "The Reciever Account is Frozen");
+        // check if the account is freezed
+        checker(_to, _value);
+
+        super.transferFrom(_from, _to, _value);
+    }
+
+    /**
+    * @dev function for checking parameters and requires
+    * @param _to address for the reciever
+    * @param _value the amount of token
+    */
+    function checker(address _to, uint256 _value) internal {
         // check for roles
         if (hasRole(_to, "Advisor")) {
             require(advisorCap >= totalTransferToAdvisor, "Remaining tokens for Advisor Exceeds the Cap allocated for Advisors Only");
@@ -135,16 +158,5 @@ contract TrainDanyToken is PausableToken, RBAC {
             require(bonusCap >= totalTransferToBonus, "Remaining tokens for Bonus Exceeds the Cap allocated for Bonus Only");
             totalTransferToBonus = totalTransferToBonus.add(_value);
         }
-
-        super.transfer(_to, _value);
-    }
-    /**
-    * @dev oberriding transferFrom function for extra logic
-    */
-    function transferFrom(address _from, address _to, uint256 _value) public returns(bool) {
-        require(!frozenAccount[_from], "The Sender Account is Frozen");
-        require(!frozenAccount[_to], "The Reciever Account is Frozen");
-        // extra logic here
-        super.transferFrom(_from, _to, _value);
     }
 }

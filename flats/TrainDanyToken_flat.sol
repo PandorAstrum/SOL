@@ -1,7 +1,5 @@
 pragma solidity ^0.4.24;
 
-// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20Basic.sol
-
 /**
  * @title ERC20Basic
  * @dev Simpler version of ERC20 interface
@@ -13,8 +11,6 @@ contract ERC20Basic {
   function transfer(address _to, uint256 _value) public returns (bool);
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
-
-// File: node_modules\openzeppelin-solidity\contracts\math\SafeMath.sol
 
 /**
  * @title SafeMath
@@ -66,8 +62,6 @@ library SafeMath {
   }
 }
 
-// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\BasicToken.sol
-
 /**
  * @title Basic token
  * @dev Basic version of StandardToken, with no allowances.
@@ -112,8 +106,6 @@ contract BasicToken is ERC20Basic {
 
 }
 
-// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20.sol
-
 /**
  * @title ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
@@ -132,8 +124,6 @@ contract ERC20 is ERC20Basic {
     uint256 value
   );
 }
-
-// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\StandardToken.sol
 
 /**
  * @title Standard ERC20 token
@@ -254,8 +244,6 @@ contract StandardToken is ERC20, BasicToken {
 
 }
 
-// File: node_modules\openzeppelin-solidity\contracts\ownership\Ownable.sol
-
 /**
  * @title Ownable
  * @dev The Ownable contract has an owner address, and provides basic authorization control
@@ -318,8 +306,6 @@ contract Ownable {
   }
 }
 
-// File: node_modules\openzeppelin-solidity\contracts\lifecycle\Pausable.sol
-
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
@@ -363,8 +349,6 @@ contract Pausable is Ownable {
     emit Unpause();
   }
 }
-
-// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\PausableToken.sol
 
 /**
  * @title Pausable token
@@ -429,8 +413,6 @@ contract PausableToken is StandardToken, Pausable {
   }
 }
 
-// File: node_modules\openzeppelin-solidity\contracts\access\rbac\Roles.sol
-
 /**
  * @title Roles
  * @author Francisco Giordano (@frangio)
@@ -483,8 +465,6 @@ library Roles {
     return _role.bearer[_addr];
   }
 }
-
-// File: node_modules\openzeppelin-solidity\contracts\access\rbac\RBAC.sol
 
 /**
  * @title RBAC (Role-Based Access Control)
@@ -587,11 +567,6 @@ contract RBAC {
   //     _;
   // }
 }
-
-// File: contracts\TrainDanyToken.sol
-
-// solium-disable linebreak-style
-pragma solidity ^0.4.24;
 
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
@@ -703,10 +678,33 @@ contract TrainDanyToken is PausableToken, RBAC {
     * @dev overriding transfer function for extra logic
     */
     function transfer(address _to, uint256 _value) public returns(bool) {
-        // if the account is freezed
+        // check if the account is freezed
         require(!frozenAccount[msg.sender], "The sender accoutn is Frozen");
         require(!frozenAccount[_to], "The Reciever Account is Frozen");
-        
+        // check if the account is freezed
+        checker(_to, _value);
+
+        super.transfer(_to, _value);
+    }
+    /**
+    * @dev oberriding transferFrom function for extra logic
+    */
+    function transferFrom(address _from, address _to, uint256 _value) public returns(bool) {
+        // check if the account is freezed
+        require(!frozenAccount[_from], "The Sender Account is Frozen");
+        require(!frozenAccount[_to], "The Reciever Account is Frozen");
+        // check if the account is freezed
+        checker(_to, _value);
+
+        super.transferFrom(_from, _to, _value);
+    }
+
+    /**
+    * @dev function for checking parameters and requires
+    * @param _to address for the reciever
+    * @param _value the amount of token
+    */
+    function checker(address _to, uint256 _value) internal {
         // check for roles
         if (hasRole(_to, "Advisor")) {
             require(advisorCap >= totalTransferToAdvisor, "Remaining tokens for Advisor Exceeds the Cap allocated for Advisors Only");
@@ -724,16 +722,5 @@ contract TrainDanyToken is PausableToken, RBAC {
             require(bonusCap >= totalTransferToBonus, "Remaining tokens for Bonus Exceeds the Cap allocated for Bonus Only");
             totalTransferToBonus = totalTransferToBonus.add(_value);
         }
-
-        super.transfer(_to, _value);
-    }
-    /**
-    * @dev oberriding transferFrom function for extra logic
-    */
-    function transferFrom(address _from, address _to, uint256 _value) public returns(bool) {
-        require(!frozenAccount[_from], "The Sender Account is Frozen");
-        require(!frozenAccount[_to], "The Reciever Account is Frozen");
-        // extra logic here
-        super.transferFrom(_from, _to, _value);
     }
 }
