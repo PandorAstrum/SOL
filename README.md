@@ -82,6 +82,7 @@ _roles = "Advisors"
 <br>
 <br>
 <br>
+
 **approve**
 ```cs
 function approve(address _spender, uint256 _value)
@@ -96,6 +97,7 @@ _value = 300000000
 <br>
 <br>
 <br>
+
 **decreaseApproval**
 ```cs
 function decreaseApproval(address _spender, uint256 _subtractedValue)
@@ -110,6 +112,7 @@ _subtractedValue = 100000000
 <br>
 <br>
 <br>
+
 **freezeAccount**
 ```cs
 function freezeAccount(address _target, bool _freeze, uint256 _releaseTime)
@@ -125,6 +128,7 @@ _releaseTime = 1538265600   // unix epoch time
 <br>
 <br>
 <br>
+
 **increaseApproval**
 ```cs
 function increaseApproval(address _spender, uint _addedValue)
@@ -139,6 +143,7 @@ _addedValue = 100000000
 <br>
 <br>
 <br>
+
 **removeRoles**
 ```cs
 function removeRoles(address[] _target, string _roles)
@@ -153,6 +158,7 @@ _roles = "Advisors"
 <br>
 <br>
 <br>
+
 **renounceOwnership**
 ```cs
 function renounceOwnership()
@@ -161,6 +167,7 @@ Set the token owners address to 0x0 (Can only be called by Token Owner)
 <br>
 <br>
 <br>
+
 **pause**
 ```cs
 function pause()
@@ -169,6 +176,7 @@ Pause the transfer of token (Can only be called by Token Owner)
 <br>
 <br>
 <br>
+
 **transfer**
 ```cs
 function transfer(address _to, uint256 _value)
@@ -183,6 +191,7 @@ _value = 300000000
 <br>
 <br>
 <br>
+
 **transferFrom**
 ```cs
 transferFrom(address _from, address _to, uint256 _value)
@@ -198,6 +207,7 @@ _value = 300000000
 <br>
 <br>
 <br>
+
 **transferOwnership**
 ```cs
 function transferOwnership(address newOwner)
@@ -210,6 +220,7 @@ _newOwner = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
 <br>
 <br>
 <br>
+
 **unpause**
 ```cs
 function unpause()
