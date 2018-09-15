@@ -65,12 +65,167 @@ To flat into a single contract run:
 sh flatten.sh
 ```
 
+### TrainDanyToken (TDY) contracts Functions
+In Alphabetic Order
+
+**addRoles**
+```cs
+function addRoles(address[] _target, string _roles)
+```
+Add Role to specified addresses (Can only be called by Token Owner)
+<br>
+*parameters*
+```cs
+_target = ["0xca35b7d915458ef540ade6068dfe2f44e8fa733c", "0xca35b7d915458ef540ade6068dfe2f44e8fa733c"]
+_roles = "Advisors"
+```
+<br>
+<br>
+<br>
+**approve**
+```cs
+function approve(address _spender, uint256 _value)
+```
+Approve an address to spend the specified amount of token on behalf of the token owner
+<br>
+*parameters*
+```cs
+_spender = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_value = 300000000
+```
+<br>
+<br>
+<br>
+**decreaseApproval**
+```cs
+function decreaseApproval(address _spender, uint256 _subtractedValue)
+```
+Decrease the amount to be spent on behalf of the token owner
+<br>
+*parameters*
+```cs
+_spender = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_subtractedValue = 100000000
+```
+<br>
+<br>
+<br>
+**freezeAccount**
+```cs
+function freezeAccount(address _target, bool _freeze, uint256 _releaseTime)
+```
+Freeze or Unfreeze the token recieveing or transfering for an account for certain time
+<br>
+*parameters*
+```cs
+_target_ = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_freeze = true              // false
+_releaseTime = 1538265600   // unix epoch time
+```
+<br>
+<br>
+<br>
+**increaseApproval**
+```cs
+function increaseApproval(address _spender, uint _addedValue)
+```
+Increase the amount to be spent on behalf of the token owner
+<br>
+*parameters*
+```cs
+_spender = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_addedValue = 100000000
+```
+<br>
+<br>
+<br>
+**removeRoles**
+```cs
+function removeRoles(address[] _target, string _roles)
+```
+Remove Role to specified addresses (Can only be called by Token Owner)
+<br>
+*parameters*
+```cs
+_target = ["0xca35b7d915458ef540ade6068dfe2f44e8fa733c", "0xca35b7d915458ef540ade6068dfe2f44e8fa733c"]
+_roles = "Advisors"
+```
+<br>
+<br>
+<br>
+**renounceOwnership**
+```cs
+function renounceOwnership()
+```
+Set the token owners address to 0x0 (Can only be called by Token Owner)
+<br>
+<br>
+<br>
+**pause**
+```cs
+function pause()
+```
+Pause the transfer of token (Can only be called by Token Owner)
+<br>
+<br>
+<br>
+**transfer**
+```cs
+function transfer(address _to, uint256 _value)
+```
+transfer of tokens to another address from token owner
+<br>
+*parameters*
+```cs
+_to = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_value = 300000000
+```
+<br>
+<br>
+<br>
+**transferFrom**
+```cs
+transferFrom(address _from, address _to, uint256 _value)
+```
+transfer of tokens from one address other than owner to other address
+<br>
+*parameters*
+```cs
+_from = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_to = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+_value = 300000000
+```
+<br>
+<br>
+<br>
+**transferOwnership**
+```cs
+function transferOwnership(address newOwner)
+```
+Transfer the owner ship of the contract to other address.
+*parameters*
+```cs
+_newOwner = 0xca35b7d915458ef540ade6068dfe2f44e8fa733c
+```
+<br>
+<br>
+<br>
+**unpause**
+```cs
+function unpause()
+```
+Unpause the transfer of token (Can only be called by Token Owner)
+<br>
+<br>
+<br>
+
 ## Release History
 
 * V1.0
     * ADD: Basic ERC20 Token
     * ADD: 3 Stages Crowdsale Contracts
     * ADD: Distribution of Calculated Token 
+
 ## Meta
 
 Ashiquzzaman Khan – [@dreadlordn](https://twitter.com/dreadlordn)

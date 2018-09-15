@@ -1,6 +1,12 @@
 token address 0x013553BF0f7843518a0842522D85fb871FFc0353
 https://rinkeby.etherscan.io/token/0x013553bf0f7843518a0842522d85fb871ffc0353#writeContract
 
+Token Deploy 0.001432024 Ether
+https://ropsten.etherscan.io/address/0xf38feadf6b9a0ab92d7354046fcf62c93ae54a27#code
+
+Crowdsale Deploy 0.001598 Gas 
+https://ropsten.etherscan.io/address/0x8a2e6315c97b6db5f8420b0dbfe37bcd37d00927#code
+
 
 /**
  * @title TDY Token

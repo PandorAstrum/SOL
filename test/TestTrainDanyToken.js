@@ -11,6 +11,7 @@ contract('TrainDanyToken', accounts => {
   var creatorAddress = accounts[0];
   var recipientAddress = accounts[1];
   var delegatedAddress = accounts[2];
+  var advisorsAddress = accounts[3];
   // general config for the token
   const _name = "TrainDany";
   const _symbol = "TDY";
@@ -88,6 +89,13 @@ contract('TrainDanyToken', accounts => {
     it("Should be Puased Token", async function(){
       const pause = await this.token.paused.call();
       pause.should.equal(false);
+    });
+    it("Should freeze the account for certain time", async function(){
+      //transfer some tdy token 
+      await this.token.transfer(advisorsAddress, 500000000);
+      const freezeAc = await this.token.freezeAccount(advisorsAddress, true, 1538265600);
+      // freezeAc.should.equal()
+      
     });
   });
 });
