@@ -1,19 +1,27 @@
 // solium-disable linebreak-style
 pragma solidity ^0.4.24;
 
-import "./../node_modules/openzeppelin-solidity/contracts/access/rbac/RBAC.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
 import "./../node_modules/openzeppelin-solidity/contracts/access/Whitelist.sol";
 
 /**
-* @title TrainDany Crowdsale Contracts
-* @dev It is a Timed Crowdsale with Roles for Advisors, Teams, Reserved 
-*/
+ * @title TrainDany Crowdsale - This is the Crowdsale contract for TrainDany Token
+ * @dev TrainDanyCrowdsale is a Finalizable Crowdsale With Timed Crowdsale and Whitelist for (KYC)
+ * Crowdsale Stage can be change along with time at later date upon initialization date
+ * `TimedCrowdsale` functions.
+ * `Finalizeable` functions.
+ * `Whitelist` functions.
+ * Total Sellable Token would be 4 000 000 000 TDY Tokens (64%)
+ * Presale participants would be offered 30% extra tokens as bonus
+ * Private participants would be offered 50% extra tokens as bonus
+ * Crowdsale participants would be offered 20%, 10%, 5%, No bunus on respective weeks from start
+ * Unsold TDY tokens can not be burnt or minted before and after the sales
+ * the rate is fixed 40000 TDY token for 1 Ether
+ */
 contract TrainDanyCrowdsale is FinalizableCrowdsale, Whitelist {
-    // TODO: Roles should work
-    // TODO: Finalize crowdsale
-    // TODO: transfer token and refund owner
-    // TODO: sealed token for lease time
+    // TODO: Finalize crowdsale (do extra work)
+    // TODO: token calculations
+    // TODO: transfer token and and eth goes to owner
 
     uint256 public rate = 40000;                                    // fixed rate for 1 ETHER = 40000 TDY Token
     uint256 public openingTime;                                     // Sales Opening Time

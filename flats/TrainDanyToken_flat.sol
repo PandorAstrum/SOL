@@ -1,5 +1,7 @@
 pragma solidity ^0.4.24;
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20Basic.sol
+
 /**
  * @title ERC20Basic
  * @dev Simpler version of ERC20 interface
@@ -11,6 +13,8 @@ contract ERC20Basic {
   function transfer(address _to, uint256 _value) public returns (bool);
   event Transfer(address indexed from, address indexed to, uint256 value);
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\math\SafeMath.sol
 
 /**
  * @title SafeMath
@@ -62,6 +66,8 @@ library SafeMath {
   }
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\BasicToken.sol
+
 /**
  * @title Basic token
  * @dev Basic version of StandardToken, with no allowances.
@@ -106,6 +112,8 @@ contract BasicToken is ERC20Basic {
 
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\ERC20.sol
+
 /**
  * @title ERC20 interface
  * @dev see https://github.com/ethereum/EIPs/issues/20
@@ -124,6 +132,8 @@ contract ERC20 is ERC20Basic {
     uint256 value
   );
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\StandardToken.sol
 
 /**
  * @title Standard ERC20 token
@@ -244,6 +254,8 @@ contract StandardToken is ERC20, BasicToken {
 
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\ownership\Ownable.sol
+
 /**
  * @title Ownable
  * @dev The Ownable contract has an owner address, and provides basic authorization control
@@ -306,6 +318,8 @@ contract Ownable {
   }
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\lifecycle\Pausable.sol
+
 /**
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
@@ -349,6 +363,8 @@ contract Pausable is Ownable {
     emit Unpause();
   }
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\token\ERC20\PausableToken.sol
 
 /**
  * @title Pausable token
@@ -413,6 +429,8 @@ contract PausableToken is StandardToken, Pausable {
   }
 }
 
+// File: node_modules\openzeppelin-solidity\contracts\access\rbac\Roles.sol
+
 /**
  * @title Roles
  * @author Francisco Giordano (@frangio)
@@ -465,6 +483,8 @@ library Roles {
     return _role.bearer[_addr];
   }
 }
+
+// File: node_modules\openzeppelin-solidity\contracts\access\rbac\RBAC.sol
 
 /**
  * @title RBAC (Role-Based Access Control)
@@ -568,6 +588,11 @@ contract RBAC {
   // }
 }
 
+// File: contracts\TrainDanyToken.sol
+
+// solium-disable linebreak-style
+pragma solidity ^0.4.24;
+
 /**
  * @title TrainDany Token - This is the token contract for TrainDany Token
  * @dev TrainDany is a ERC20 Standard Token, where all tokens are pre-assigned to the creator.
@@ -588,7 +613,6 @@ contract RBAC {
  */
 
 contract TrainDanyToken is PausableToken, RBAC {
-    //TODO: lock account for certain time
 
     string public name = "TrainDany";                           // Name of the token
     string public symbol = "TDY";                               // Symbol of the Token
@@ -606,13 +630,13 @@ contract TrainDanyToken is PausableToken, RBAC {
     uint256 private totalTransferToSales;                       // tracker for how many tokens gone to sales
     uint256 private totalTransferToBonus;                       // tracker for how many tokens gone to bonus
 
-    mapping (address => bool) public frozenAccount;             // mapping for frozen account                
+    mapping (address => bool) public frozenAccount;             // mapping for frozen account           
     /**
     * @dev Events for Frozen Funds
     * @param target the address whose account will be frozen
-    * @param releaseTime the time until the account will be frozen
+    * @param freeze the time until the account will be frozen
     */
-    event FrozenFunds(address indexed target, uint256 releaseTime);
+    event FrozenFunds(address indexed target, bool freeze);
 
     /**
     * @dev Constructor that gives msg.sender all of existing tokens. pause set to false by default
@@ -627,13 +651,11 @@ contract TrainDanyToken is PausableToken, RBAC {
     * @dev freeze functions Prevent | Allow` `target` from sending & receiving tokens
     * @param _target Address to be frozen
     * @param _freeze either to freeze it or not (true | False)
-    * @param _releaseTime time until the accounts will be prevented from sending or recieving any token
     */
-    function freezeAccount(address _target, bool _freeze, uint256 _releaseTime) public onlyOwner {
+    function freezeAccount(address _target, bool _freeze) public onlyOwner {
         frozenAccount[_target] = _freeze;
-        emit FrozenFunds(_target, _releaseTime);
+        emit FrozenFunds(_target, _freeze);
     }
-    
     /**
     * @dev function for adding roles to an address
     * @param _target an array of address for the role. e.g: ["0x0", "0x0"]
@@ -644,7 +666,7 @@ contract TrainDanyToken is PausableToken, RBAC {
             addRole(_target[i], _roles);
         }
     }
-        /**
+    /**
     * @dev function for removing roles to an address
     * @param _target an array of address for the role. e.g: ["0x0", "0x0"]
     * @param _roles string text of the role. All in small letters followd by A capital letter. e.g: "Advisors"
@@ -654,7 +676,6 @@ contract TrainDanyToken is PausableToken, RBAC {
             removeRole(_target[i], _roles);
         }
     }
-
     /**
     * @dev function for getting back the amount of remaining token for given roles and shares
     * @param _roles string to specify the roles . e.g: 'advisor', 'team', 'reserved', 'sales'
@@ -679,8 +700,8 @@ contract TrainDanyToken is PausableToken, RBAC {
     */
     function transfer(address _to, uint256 _value) public returns(bool) {
         // check if the account is freezed
-        require(!frozenAccount[msg.sender], "The sender accoutn is Frozen");
-        require(!frozenAccount[_to], "The Reciever Account is Frozen");
+        require(!frozenAccount[msg.sender]);
+        require(!frozenAccount[_to]);
         // check if the account is freezed
         checker(_to, _value);
 
@@ -690,9 +711,8 @@ contract TrainDanyToken is PausableToken, RBAC {
     * @dev oberriding transferFrom function for extra logic
     */
     function transferFrom(address _from, address _to, uint256 _value) public returns(bool) {
-        // check if the account is freezed
-        require(!frozenAccount[_from], "The Sender Account is Frozen");
-        require(!frozenAccount[_to], "The Reciever Account is Frozen");
+        require(!frozenAccount[_from]);
+        require(!frozenAccount[_to]);
         // check if the account is freezed
         checker(_to, _value);
 
@@ -707,19 +727,19 @@ contract TrainDanyToken is PausableToken, RBAC {
     function checker(address _to, uint256 _value) internal {
         // check for roles
         if (hasRole(_to, "Advisor")) {
-            require(advisorCap >= totalTransferToAdvisor, "Remaining tokens for Advisor Exceeds the Cap allocated for Advisors Only");
+            require(advisorCap >= totalTransferToAdvisor);
             totalTransferToAdvisor = totalTransferToAdvisor.add(_value);
         } else if (hasRole(_to, "Team")) {
-            require(teamCap >= totalTransferToTeam, "Remaining tokens for Team Exceeds the Cap allocated for Team Only");
+            require(teamCap >= totalTransferToTeam);
             totalTransferToTeam = totalTransferToTeam.add(_value);
         } else if (hasRole(_to, "Sales")) {
-            require(salesCap >= totalTransferToSales, "Remaining tokens for Sales Exceeds the Cap allocated for Sales Only");
+            require(salesCap >= totalTransferToSales);
             totalTransferToSales = totalTransferToSales.add(_value);
         } else if (hasRole(_to, "Reserved")) {
-            require(reservedCap >= totalTransferToReserved, "Remaining tokens for Reserved Exceeds the Cap allocated for Reserved Only");
+            require(reservedCap >= totalTransferToReserved);
             totalTransferToReserved = totalTransferToReserved.add(_value);
         } else if (hasRole(_to, "Bonus")) {
-            require(bonusCap >= totalTransferToBonus, "Remaining tokens for Bonus Exceeds the Cap allocated for Bonus Only");
+            require(bonusCap >= totalTransferToBonus);
             totalTransferToBonus = totalTransferToBonus.add(_value);
         }
     }
